@@ -1,11 +1,16 @@
 import { Form, Input, Select, DatePicker, TimePicker, Button, Card, Row, Col } from 'antd';
-import { fetchLeads } from '../redux/appSlice';
+import { addLead, fetchLeads } from '../redux/appSlice';
 import { useDispatch } from 'react-redux';
+import { useCallback } from 'react';
+import { useAuth } from './AuthContext';
 
 const { Option } = Select;
 
-const LeadForm = ({ onSubmit }) => {
+const LeadForm = () => {
   const [form] = Form.useForm();
+  const { name} = useAuth();
+
+    const dispatch = useDispatch();
 
   const locations = ['Pune', 'Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Hyderabad', 'Kolkata'];
 
@@ -15,6 +20,18 @@ const LeadForm = ({ onSubmit }) => {
 
   const incomeRanges = ['blw 50k', 'abv 50k', '50k-1L', '1L-2L', 'abv 2L'];
 
+    const handleLeadSubmit = useCallback(
+      async (formData) => {
+        try {
+          await dispatch(addLead(formData));
+          dispatch(fetchLeads());
+        } catch (error) {
+          console.error("Failed to add lead:", error);
+        }
+      },
+      [dispatch]
+    );
+
 
   const handleSubmit = (values) => {
     const formattedValues = {
@@ -23,11 +40,11 @@ const LeadForm = ({ onSubmit }) => {
       time: values.time ? values.time : null,
       status:"new",
     };
-    onSubmit(formattedValues);
+    handleLeadSubmit(formattedValues);
   };
 
   return (
-    <Card title="Add New Lead" className="w-[90vw] border-none ">
+    <Card title="Add New Lead" className="w-auto mt-10 border-none ">
       <Form
         form={form}
         layout="vertical" // Keeps labels above inputs for clarity
@@ -161,8 +178,8 @@ const LeadForm = ({ onSubmit }) => {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="tlManager" label="TL Manager">
-              <Input placeholder="Enter TL manager name" />
+            <Form.Item name="tlManager" label="TL Manager" >
+              <Input placeholder="Enter TL manager name" value={name}/>
             </Form.Item>
           </Col>
         </Row>
@@ -170,12 +187,12 @@ const LeadForm = ({ onSubmit }) => {
         <Row justify="end" gutter={16}>
           {/* Submit and Cancel Buttons */}
           <Col>
-            <button onClick={() => form.resetFields()} type="default">
+            <button onClick={() => form.resetFields()} type="default" className='border border-black p-2 rounded-lg'>
               Cancel
             </button>
           </Col>
           <Col>
-            <button type="primary" htmlType="submit">
+            <button type="primary" htmlType="submit" className='border border-black p-2 rounded-lg'>
               Submit Lead
             </button>
           </Col>

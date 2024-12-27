@@ -1,15 +1,14 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { Table, Modal, Select } from "antd";
+import React, { useEffect, useMemo, useCallback } from "react";
+import { Table, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import LeadForm from "./Form";
-import { addLead, fetchLeads, updateStatus } from "../redux/appSlice";
+import {  fetchLeads, updateStatus } from "../redux/appSlice";
 
 const { Option } = Select;
 
 const TelecallingDashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
-  const { leads, loading } = useSelector((state) => state.user);
+  const { leads, loading ,usersByRole } = useSelector((state) => state.user);
+
 
   // Fetch leads once when the component mounts
   useEffect(() => {
@@ -49,24 +48,6 @@ const TelecallingDashboard = () => {
 
   // Memoize leads data
   const memoizedLeads = useMemo(() => leads, [leads]);
-
-  // Handle modal visibility
-  const showModal = useCallback(() => setIsModalOpen(true), []);
-  const handleCancel = useCallback(() => setIsModalOpen(false), []);
-
-  // Handle lead submission
-  const handleLeadSubmit = useCallback(
-    async (formData) => {
-      try {
-        await dispatch(addLead(formData));
-        dispatch(fetchLeads());
-        setIsModalOpen(false);
-      } catch (error) {
-        console.error("Failed to add lead:", error);
-      }
-    },
-    [dispatch]
-  );
 
   // Handle status change
   const handleStatusChange = useCallback(
@@ -171,11 +152,11 @@ const TelecallingDashboard = () => {
         />
       )}
 
-      <button type="primary" onClick={showModal} className="mt-4">
+      {/* <button type="primary" onClick={showModal} className="mt-4">
         Add Lead
-      </button>
+      </button> */}
 
-      <Modal
+      {/* <Modal
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
@@ -183,7 +164,7 @@ const TelecallingDashboard = () => {
         style={{ top: 20 }}
       >
         <LeadForm onSubmit={handleLeadSubmit} />
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

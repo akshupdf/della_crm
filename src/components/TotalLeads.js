@@ -1,10 +1,19 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Table } from "antd";
-import {  useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
+import { fetchLeads } from "../redux/appSlice";
 
 const TotalLeads = () => {
 
+  const dispatch = useDispatch();
+
   const { leads, loading } = useSelector((state) => state.user);
+
+   useEffect(() => {
+     
+        dispatch(fetchLeads());
+      
+      }, [ dispatch]);
 
   // Memoize columns
   const columns = useMemo(

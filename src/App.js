@@ -14,6 +14,7 @@ import Login from "./components/Login";
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "./components/Navbar";
 import AddMember from "./components/AddMember";
+import LeadForm from "./components/Form";
 
 
 const { Content } = Layout;
@@ -32,7 +33,7 @@ const App = () => {
           <Navbar />
           <Content className="bg-white shadow-md p-6">
             <Routes>
-              <Route path="/add-leads" element={<TelecallingDashboard />} />
+              <Route path="/add-leads" element={ <LeadForm />} />
               <Route path="/" element={<Login />} />
               <Route path="/dashboard" element={<Dashboardv2 />} />
               <Route path="/teammember" element={<TeamMember />} />

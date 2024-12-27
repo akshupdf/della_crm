@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember} from './appSlice';
+import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl} from './appSlice';
 
 const userSlice = createSlice({
   name: 'user',
@@ -14,6 +14,7 @@ const userSlice = createSlice({
     roles: [], // List of roles
     currentRole: null, // Current logged-in user's role
     usersByRole: null, // Users filtered by role
+    usersByTL: null, 
     addLead: null
   },
   reducers: {
@@ -94,6 +95,20 @@ const userSlice = createSlice({
         state.usersByRole = action.payload;
       })
       .addCase(getLogin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+       // Fetch Users by Role
+       .addCase(fetchUsersTl.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUsersTl.fulfilled, (state, action) => {
+        state.loading = false;
+        state.usersByTL = action.payload;
+      })
+      .addCase(fetchUsersTl.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

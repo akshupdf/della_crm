@@ -9,8 +9,6 @@ const { Sider } = Layout;
 const Sidebar = () => {
 
    const {role } = useAuth();
-
-   console.log(role);
    
 
   return (
@@ -36,7 +34,7 @@ const Sidebar = () => {
   
        
         {
-          ["superadmin", "tl","sales"].includes(role) && (
+          ["superadmin","sales"].includes(role) && (
             <Menu.Item key="7" icon={<UserOutlined />}>
             <Link to="/addmember">Add Member</Link>
           </Menu.Item>
@@ -58,7 +56,7 @@ const Sidebar = () => {
           
         }
         {
-           ["superadmin", "tl" , "reception"].includes(role) && (
+           ["superadmin", "reception"].includes(role) && (
             <Menu.Item key="5" icon={<TeamOutlined />}>
             <Link to="/deal">Deal</Link>
             </Menu.Item>
@@ -68,7 +66,7 @@ const Sidebar = () => {
        {
         ["superadmin", "tl"].includes(role) && (
           <Menu.Item key="6" icon={<TeamOutlined />}>
-          <Link to="/teammanagement">Team Performance</Link>
+          <Link to="/teammember">Team Performance</Link>
           </Menu.Item> )
        }
        

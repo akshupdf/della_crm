@@ -3,13 +3,20 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 let BASE_URL = 'https://della-backend.vercel.app/api/v1';
+const token = localStorage.getItem('token');
 
 export const addUser = createAsyncThunk(
   'user/addUser',
   async (values, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/addUsers`, values);
-      return response;
+      const response = await axios.post(`${BASE_URL}/addUser`, values ,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          }
+        }
+      );
+      return response.data;;
       
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -42,8 +49,14 @@ export const getLogin = createAsyncThunk(
     try {
       const response = await axios.post(`${BASE_URL}/login` , data);
       
+      
       localStorage.setItem('token', response.data?.token);
       localStorage.setItem('role', response.data?.role);
+      localStorage.setItem('name', response.data?.name);
+      if(response.data?.role === "tl"){
+        localStorage.setItem('tl_id', response.data?.id);
+      }
+    
       return response.data;
       
 
@@ -94,11 +107,25 @@ export const fetchMember = createAsyncThunk(
   }
 );
 
+export const fetchUsersTl = createAsyncThunk(
+  'api/getUsersByTl',
+  async (tl,thunkAPI) => {
+
+    try {
+      const response = await axios.get(`${BASE_URL}/${tl}/getUsersByTl`);
+      return response.data;
+
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+
 export const addLead = createAsyncThunk(
   'api/addLead',
   async (data, thunkAPI) => {
     try {
-        const token = localStorage.getItem('token');
       const response = await axios.post(`${BASE_URL}/uploadLead`, [data] , {
         headers: {
           Authorization: `Bearer ${token}`, 

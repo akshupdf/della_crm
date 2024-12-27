@@ -1,11 +1,22 @@
-import React, { useState } from "react";
-import { Table, Card, Modal, Tabs, Button } from "antd";
-import { PlusOutlined, RiseOutlined, TeamOutlined } from "@ant-design/icons";
-import LeadForm from "./Form";
+import React, { useEffect, useState } from "react";
+import { Card, Modal, Table } from "antd";
+import Tlteam from "./Tlteam";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsersTl } from "../redux/appSlice";
+import { useAuth } from "./AuthContext";
+
 
 const TeamMember = () => {
-  const [activeTab, setActiveTab] = useState("leads");
+
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { usersByTL } = useSelector((state) => state.user);
+
+    const { id} = useAuth();
+    
+  
+  
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -16,61 +27,91 @@ const TeamMember = () => {
     setIsModalOpen(false);
   };
 
-  const [leads, setLeads] = useState([
-    {
-      id: 1,
-      date: '05.03.2025',
-      location: 'Pune',
-      name: 'Abc',
-      phone1: 'S1',
-      phone2: 'S1',
-      emailId: 'Gmail.com',
-      age: 28,
-      profession: 'Service',
-      income: 'abv 50k',
-      lastHoliday: 'Goa',
-      carCredit: 'yes',
-      creditCard: 'no',
-      time: '2:35pm',
-      executive: 'priya',
-      tlManager: 'ketan',
-      status: 'reached'
-    }
-  ]);
-
-  const columns = [
-    { title: "Date", dataIndex: "date", key: "date" },
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Location", dataIndex: "location", key: "location" },
-    { title: "Phone", dataIndex: "phone1", key: "phone1" },
-    { title: "Profession", dataIndex: "profession", key: "profession" },
-    { title: "Income", dataIndex: "income", key: "income" },
-    { title: "Executive", dataIndex: "executive", key: "executive" },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      // render: (status) => <Tag color="green">{status}</Tag>,
-    },
-  ];
+  useEffect(() => {
+     
+        dispatch(fetchUsersTl(id));
+      
+      }, [ dispatch]);
 
 
 
-  const handleLeadSubmit = (formData) => {
-    setLeads(prevLeads => [...prevLeads, { ...formData, id: prevLeads.length + 1 }]);
-    setIsModalOpen(false);
-  };
+  // const handleLeadSubmit = (formData) => {
+  //   setLeads(prevLeads => [...prevLeads, { ...formData, id: prevLeads.length + 1 }]);
+  //   setIsModalOpen(false);
+  // };
 
   return (
     <div className="dashboard">
+      <div className="p-4 space-y-6 mt-10">
+         
+      
+               <Table
+                 className="rounded-md border"
+                 dataSource={usersByTL}
+                 rowKey="id"
+                 pagination={false}
+               >
+                 <Table.Column title="ID" dataIndex="_id" key="id" />
+                 <Table.Column title="Employee Name" dataIndex="username" key="name" />
+                 <Table.Column
+                   title="Generated Lead"
+                   dataIndex="generatedLead"
+                   key="generatedLead"
+                   align="center"
+                 />
+                 <Table.Column
+                   title="Confirmed Deals"
+                   dataIndex="confirmedDeals"
+                   key="confirmedDeals"
+                   align="center"
+                 />
+               </Table>
      
+               {/* <div className="mt-4 flex justify-between items-center">
+                 <button type="dashed" size="small">
+                   Add Employee
+                 </button>
+                 <div className="flex gap-2">
+                   <button type="dashed" size="small">
+                     ADD Leads
+                   </button>
+                   <button type="dashed" size="small">
+                     Total Leads
+                   </button>
+                   <button type="dashed" size="small">
+                     Confirmed Leads
+                   </button>
+                   <button type="dashed" size="small">
+                     Deal
+                   </button>
+                   <button type="dashed" size="small">
+                     Team Performance
+                   </button>
+                 </div>
+               </div> */}
+         
+           
+         </div>
+
+<div>
+
+  <button className="border border-black p-2" onClick={showModal}>
+    Add User
+  </button>
+</div>
 
 
 
 
-
-
-  
+  <Modal
+     
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel} 
+        footer={null}
+      >
+        < Tlteam  setIsModalOpen={setIsModalOpen}/> 
+      </Modal>
 
 
      
