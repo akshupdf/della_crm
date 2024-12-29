@@ -5,23 +5,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { dashboardCount } from '../redux/appSlice';
 import { UserOutlined, CheckCircleOutlined, LineChartOutlined } from "@ant-design/icons";
 
-
 export default function Dashboardv2() {
   const dispatch = useDispatch();
-  const { dashboardData, loading } = useSelector((state) => state.user);
-
+  const { dashboardData = [], loading } = useSelector((state) => state.user); // Default value for dashboardData
 
   useEffect(() => {
     dispatch(dashboardCount());
   }, [dispatch]);
 
-  // Initialize data array
-  const data = dashboardData && dashboardData[0] ? [
-    { name: "Confirmed Leads", value: dashboardData[0]?.confirmedLeadsCount || 0 },
-    { name: "Total Leads", value: (dashboardData[0]?.totalLeadsCount || 0) - (dashboardData[0]?.confirmedLeadsCount || 0) },
-  ] : [];
+  // Safe data initialization
+  const data =
+    Array.isArray(dashboardData) && dashboardData[0]
+      ? [
+          { name: "Confirmed Leads", value: dashboardData[0]?.confirmedLeadsCount || 0 },
+          { name: "Total Leads", value: (dashboardData[0]?.totalLeadsCount || 0) - (dashboardData[0]?.confirmedLeadsCount || 0) },
+        ]
+      : [];
 
-  const cardsData = [
+  const cardsData = Array.isArray(dashboardData) && dashboardData[0]
+    ? [
         {
           title: "Total Leads",
           value: dashboardData[0]?.totalLeadsCount || 0,
@@ -38,7 +40,7 @@ export default function Dashboardv2() {
           icon: LineChartOutlined,
         },
       ]
- 
+    : [];
 
   const COLORS = ["#1890ff", "#d3d3d3"];
 
@@ -51,7 +53,7 @@ export default function Dashboardv2() {
       ) : (
         <div>
           <div style={{ display: "flex", gap: "16px", marginBottom: "24px" }}>
-            {Array.isArray(cardsData) && cardsData.length > 0 ? (
+            {cardsData.length > 0 ? (
               cardsData.map((card, index) => (
                 <Card key={index} bordered style={{ textAlign: "center", flex: 1 }}>
                   <div className="flex items-center">
