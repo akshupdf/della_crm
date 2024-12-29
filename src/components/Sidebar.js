@@ -40,17 +40,18 @@ const Sidebar = () => {
           </Menu.Item>
            )
         }
+         {
+          ["superadmin", "tl"].includes(role) && (
+        <Menu.Item key="4" icon={<TeamOutlined />}>
+        <Link to="/confirmedleads">Confirmed Leads</Link>
+        </Menu.Item> )}
       {
         ["superadmin", "tl"].includes(role) && (
           <Menu.Item key="3" icon={<TeamOutlined />}>
           <Link to="/totalleads">Total leads</Link>
           </Menu.Item> )
       }
-         {
-          ["superadmin", "tl"].includes(role) && (
-        <Menu.Item key="4" icon={<TeamOutlined />}>
-        <Link to="/confirmedleads">Confirmed Leads</Link>
-        </Menu.Item> )}
+        
 
         {
           

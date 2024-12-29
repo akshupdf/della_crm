@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Modal, Table } from "antd";
+import {  Modal, Table } from "antd";
 import Tlteam from "./Tlteam";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsersTl } from "../redux/appSlice";
@@ -11,7 +11,7 @@ const TeamMember = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { usersByTL } = useSelector((state) => state.user);
+  const { usersByTL ,loading } = useSelector((state) => state.user);
 
     const { id} = useAuth();
     
@@ -31,7 +31,7 @@ const TeamMember = () => {
      
         dispatch(fetchUsersTl(id));
       
-      }, [ dispatch]);
+      }, [id, dispatch]);
 
 
 
@@ -50,19 +50,20 @@ const TeamMember = () => {
                  dataSource={usersByTL}
                  rowKey="id"
                  pagination={false}
+                 loading={loading}
                >
-                 <Table.Column title="ID" dataIndex="_id" key="id" />
+                 {/* <Table.Column title="ID" dataIndex="_id" key="id" /> */}
                  <Table.Column title="Employee Name" dataIndex="username" key="name" />
                  <Table.Column
                    title="Generated Lead"
-                   dataIndex="generatedLead"
-                   key="generatedLead"
+                   dataIndex="totalLeads"
+                   key="totalLeads"
                    align="center"
                  />
                  <Table.Column
                    title="Confirmed Deals"
-                   dataIndex="confirmedDeals"
-                   key="confirmedDeals"
+                   dataIndex="confirmedLeads"
+                   key="confirmedLeads"
                    align="center"
                  />
                </Table>
@@ -95,7 +96,7 @@ const TeamMember = () => {
 
 <div>
 
-  <button className="border border-black p-2" onClick={showModal}>
+  <button className="border border-black p-2 rounded-lg ml-4" onClick={showModal}>
     Add User
   </button>
 </div>

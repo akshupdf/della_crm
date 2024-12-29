@@ -1,16 +1,25 @@
-import { Form, Input, Select, DatePicker, TimePicker, Button, Card, Row, Col } from 'antd';
-import { addLead, fetchLeads } from '../redux/appSlice';
-import { useDispatch } from 'react-redux';
-import { useCallback } from 'react';
+import { Form, Input, Select, DatePicker, Card, Row, Col } from 'antd';
+import { addLead, fetchLeads, fetchUsersTl } from '../redux/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useCallback, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 
 const { Option } = Select;
 
 const LeadForm = () => {
   const [form] = Form.useForm();
-  const { name} = useAuth();
+  const { usersByTL } = useSelector((state) => state.user);
+  const { id} = useAuth();
+
+  const name = localStorage.getItem('name');
 
     const dispatch = useDispatch();
+
+      useEffect(() => {
+         
+            dispatch(fetchUsersTl(id));
+          
+          }, [id,dispatch]);
 
   const locations = ['Pune', 'Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Hyderabad', 'Kolkata'];
 
@@ -25,11 +34,13 @@ const LeadForm = () => {
         try {
           await dispatch(addLead(formData));
           dispatch(fetchLeads());
+          alert('Lead added successfully!');
+          form.resetFields();
         } catch (error) {
           console.error("Failed to add lead:", error);
         }
       },
-      [dispatch]
+      [form,dispatch]
     );
 
 
@@ -39,6 +50,7 @@ const LeadForm = () => {
       date: values.date ? values.date.format('YYYY-MM-DD') : null,
       time: values.time ? values.time : null,
       status:"new",
+      tl: id
     };
     handleLeadSubmit(formattedValues);
   };
@@ -169,17 +181,37 @@ const LeadForm = () => {
               <TimePicker style={{ width: '100%' }} />
             </Form.Item> */}
             <Form.Item name="time" label="time">
-              <Input placeholder="Enter time" />
+            <Select>
+                <Option value="12.00 AM - 2.00 PM">12.00 PM - 2.00 PM</Option>
+                <Option value="2.00 PM - 4.00 PM">2.00 PM - 4.00 PM</Option>
+                <Option value="4.00 PM - 6.00 PM">4.00 PM - 6.00 PM</Option>
+                <Option value="6.00 PM - 8.00 PM">6.00 PM - 8.00 PM</Option>
+              </Select>
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="executive" label="Executive">
-              <Input placeholder="Enter executive name" />
+          <Form.Item
+              name="executive"
+              label="Executive"
+            >
+            <Select
+                showSearch
+                placeholder="Select executive"
+                filterOption={(input, option) =>
+                  option?.children?.toLowerCase().includes(input?.toLowerCase())
+                }
+              >
+                {usersByTL?.map((user) => (
+                  <Option key={user.name} value={user.name}>
+                    {user.name}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="tlManager" label="TL Manager" >
-              <Input placeholder="Enter TL manager name" value={name}/>
+          <Form.Item name="tlManager" label="TL Manager" initialValue={name}>
+              <Input disabled />
             </Form.Item>
           </Col>
         </Row>

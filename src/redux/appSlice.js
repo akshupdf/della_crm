@@ -83,7 +83,7 @@ export const fetchLeads = createAsyncThunk(
  let stat = status || "";
 
     try {
-      const response = await axios.get(`${BASE_URL}/getleads?status=${stat}` 
+      const response = await axios.get(`${BASE_URL}/getleads?status=${stat}` ,{ headers: { Authorization: `Bearer ${token}` } }
      );
       return response.data;
 
@@ -113,14 +113,15 @@ export const fetchUsersTl = createAsyncThunk(
 
     try {
       const response = await axios.get(`${BASE_URL}/${tl}/getUsersByTl`);
-      return response.data;
+      
+      return response.data.agentData;
+
 
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
-
 
 export const addLead = createAsyncThunk(
   'api/addLead',
@@ -141,12 +142,27 @@ export const addMember = createAsyncThunk(
   'api/addMember',
   async (data, thunkAPI) => {
     try {
-        const token = localStorage.getItem('token');
       const response = await axios.post(`${BASE_URL}/membership`, data , {
         headers: {
           Authorization: `Bearer ${token}`, 
         } });
       return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const dashboardCount = createAsyncThunk(
+  'api/dashboard_count',
+  async (thunkAPI) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/dashboard_count`, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        } });
+      return response.data;
+
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }

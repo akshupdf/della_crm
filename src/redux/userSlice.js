@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl} from './appSlice';
+import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl, dashboardCount} from './appSlice';
 
 const userSlice = createSlice({
   name: 'user',
@@ -15,7 +15,8 @@ const userSlice = createSlice({
     currentRole: null, // Current logged-in user's role
     usersByRole: null, // Users filtered by role
     usersByTL: null, 
-    addLead: null
+    addLead: null,
+    dashboardData: null
   },
   reducers: {
     logoutUser: (state) => {
@@ -123,6 +124,22 @@ const userSlice = createSlice({
         state.leads = [...state.leads, action.payload];
       })
       .addCase(addLead.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //dashboard
+
+      
+      .addCase(dashboardCount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(dashboardCount.fulfilled, (state, action) => {
+        state.loading = false;
+        state.dashboardData = [ action.payload];
+      })
+      .addCase(dashboardCount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

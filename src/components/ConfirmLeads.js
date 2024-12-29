@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLeads } from "../redux/appSlice";
@@ -34,7 +34,7 @@ const ConfirmLeads = () => {
    
       dispatch(fetchLeads("confirmed"));
     
-    }, [leads?.length, dispatch]);
+    }, [dispatch]);
 
   return (
     <div className="px-8 rounded-2xl mt-10">
@@ -74,7 +74,7 @@ const ConfirmLeads = () => {
               key={index}
               className={index % 2 === 0 ? "bg-white" : ""}
               style={{
-                backgroundColor: index % 2 === 1 ? "#EAF2D3" : "",
+                backgroundColor: index % 2 === 1 ? "" : "",
                 borderBottom: "1px solid #A4CC12",
               }}
             >
@@ -109,7 +109,7 @@ const ConfirmLeads = () => {
           ))}
         </tbody>
       </table>) : 
-     <Table columns={columns} dataSource={leads} rowKey="id" pagination={{ pageSize: 10 }} className="rounded-2xl"/> }
+     <Table columns={columns} loading={loading} dataSource={leads} rowKey="id" pagination={{ pageSize: 10 }} className="rounded-2xl"/> }
 
 
 

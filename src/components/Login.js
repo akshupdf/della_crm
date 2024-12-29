@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {toast, ToastContainer } from "react-toastify";
 import { useAuth } from "./AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; 
-import Cookies from 'js-cookie'; 
 import { useDispatch, useSelector } from "react-redux";
 import { getLogin } from "../redux/appSlice";
 //import Swal from "sweetalert2";
@@ -15,9 +13,10 @@ const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
-  const {isAuthenticated, login } = useAuth();
+  const { login } = useAuth();
+    const { loading  } = useSelector((state) => state.user);
 
-  // const {isAuthenticated,login } = useAuth();
+
   
   // useEffect(() => {
   //   if (isAuthenticated) {
@@ -51,17 +50,17 @@ const Login = () => {
     
   //   switch(role) {
   //     case 'agent':
-  //       navigate("/DashboardAgent");
+  //       navigate("/dashboard");
   //       break;
   //     case 'admin':
-  //       navigate("/Dashboard");
+  //       navigate("/dashboard");
   //       break;
   //     case 'super_admin':
 
-  //       navigate("/DashboardSA");
+  //       navigate("/dashboard");
   //       break;
   //     case 'TL':
-  //       navigate("/DashboardTL");
+  //       navigate("/dashboard");
   //       break;
   //     default:
   //       navigate("/");
@@ -73,8 +72,6 @@ const Login = () => {
     e.preventDefault();
 
     // Clear any previous success or error messages
-
-
     const values = {
       "username": username,
       "password": password
@@ -128,11 +125,13 @@ const Login = () => {
   };
 
   return (
+
     <div className="flex flex-col items-center justify-center h-[87.8vh] rounded-xl">
-      {/* <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md w-96"
-      > */}
+      
+    {
+      loading ? "loading..." : 
+    
+    
       <div className="bg-white p-6 rounded-lg shadow-md w-96"> 
         <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
         <div className="mb-4">
@@ -177,8 +176,9 @@ const Login = () => {
         >
           Login
         </button>
-        </div>
-      {/* </form> */}
+        </div> 
+}
+      
       <ToastContainer  containerId={"loginToast"} />
     </div>
   );
