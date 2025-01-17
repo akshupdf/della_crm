@@ -4,14 +4,17 @@ import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from "recharts";
 import { useDispatch, useSelector } from 'react-redux';
 import { dashboardCount } from '../redux/appSlice';
 import { UserOutlined, CheckCircleOutlined, LineChartOutlined } from "@ant-design/icons";
+import { useAuth } from './AuthContext';
 
 export default function Dashboardv2() {
   const dispatch = useDispatch();
   const { dashboardData = [], loading } = useSelector((state) => state.user); // Default value for dashboardData
 
+  const {token } = useAuth();
+
   useEffect(() => {
     dispatch(dashboardCount());
-  }, [dispatch]);
+  }, [token,dispatch]);
 
   // Safe data initialization
   const data =

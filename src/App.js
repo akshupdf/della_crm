@@ -15,6 +15,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "./components/Navbar";
 import AddMember from "./components/AddMember";
 import LeadForm from "./components/Form";
+import AssignLeads from "./components/AssignLeads";
+
 
 
 const { Content } = Layout;
@@ -42,6 +44,7 @@ const App = () => {
               <Route path="/deal" element={<Deal />} />
               <Route path="/teammanagement" element={<TeamManagement />} />
               <Route path="/addmember" element={<AddMember />} />
+              <Route path="/assign" element={<AssignLeads />} />
             </Routes>
           </Content>
         </Layout>

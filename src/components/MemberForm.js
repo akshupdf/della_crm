@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Input, Select, DatePicker, button, Card, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { uploadImg } from '../redux/appSlice';
 
 const { Option } = Select;
 
@@ -11,6 +13,14 @@ const MembershipForm = ({ onSubmit }) => {
   const [kids, setKids] = useState(0);
   const [kidsAges, setKidsAges] = useState([]);
   const [packagePrice, setPackagePrice] = useState(1666); 
+  const [imageUrl, setImageUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [imageUrl1, setImageUrl1] = useState(null);
+  const [imageUrl2, setImageUrl2] = useState(null);
+  const [imageUrl3, setImageUrl3] = useState(null);
+
+  const dispatch = useDispatch();
+
 
   const handleSubmit = (values) => {
 
@@ -18,8 +28,13 @@ const MembershipForm = ({ onSubmit }) => {
       ...values,
       date: values.date ? values.date.format('YYYY-MM-DD') : null,
       time: values.time ? values.time : null,
+      paymentProof: imageUrl1,
+      memberKyc: imageUrl2,
+      digitalSignature: imageUrl3,
       status:"new",
     };
+    console.log(formattedValues);
+    
     onSubmit(formattedValues);
     form.resetFields();
   };
@@ -65,6 +80,28 @@ const MembershipForm = ({ onSubmit }) => {
   
       setPackagePrice(basePrice);
     };
+
+  
+    const handleImageUpload = async (info, setImageUrl) => {
+      setLoading(true);
+  
+      const formData = new FormData();
+      formData.append('file', info.file);
+      
+      try {
+        const response = await dispatch(uploadImg(formData)); // Adjust `uploadImg` if needed for API calls.
+       
+        
+        setImageUrl(response?.payload?.url);
+        info.onSuccess(response, info.file);
+      } catch (error) {
+        console.error('Upload failed:', error);
+        info.onError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
 
   return (
     <Card title="Membership Details" style={{ maxWidth: 800, margin: '0 auto' }}>
@@ -161,14 +198,52 @@ const MembershipForm = ({ onSubmit }) => {
 
         {/* Proofs and Agreements */}
         <h3>Proofs and Agreements</h3>
-        <Form.Item name="paymentProof" label="Payment Proof">
-          <Upload>
-            <button icon={<UploadOutlined />}>Upload Payment Proof</button>
+        <Form.Item label="Image 1">
+          <Upload
+            customRequest={(info) => handleImageUpload(info, setImageUrl1)}
+            listType="picture-card"
+            showUploadList={false}
+          >
+            {imageUrl1 ? (
+              <img src={imageUrl1} alt="Uploaded" style={{ width: '100%' }} />
+            ) : (
+              <div>
+                <UploadOutlined />
+                <div style={{ marginTop: 8 }}>{loading ? 'Uploading...' : 'Click to Upload'}</div>
+              </div>
+            )}
           </Upload>
         </Form.Item>
-        <Form.Item name="memberKyc" label="Member KYC">
-          <Upload>
-            <button icon={<UploadOutlined />}>Upload KYC Documents</button>
+        <Form.Item label="Image 2">
+          <Upload
+            customRequest={(info) => handleImageUpload(info, setImageUrl2)}
+            listType="picture-card"
+            showUploadList={false}
+          >
+            {imageUrl2 ? (
+              <img src={imageUrl2} alt="Uploaded" style={{ width: '100%' }} />
+            ) : (
+              <div>
+                <UploadOutlined />
+                <div style={{ marginTop: 8 }}>{loading ? 'Uploading...' : 'Click to Upload'}</div>
+              </div>
+            )}
+          </Upload>
+        </Form.Item>
+        <Form.Item label="Image 3">
+          <Upload
+            customRequest={(info) => handleImageUpload(info, setImageUrl3)}
+            listType="picture-card"
+            showUploadList={false}
+          >
+            {imageUrl3 ? (
+              <img src={imageUrl3} alt="Uploaded" style={{ width: '100%' }} />
+            ) : (
+              <div>
+                <UploadOutlined />
+                <div style={{ marginTop: 8 }}>{loading ? 'Uploading...' : 'Click to Upload'}</div>
+              </div>
+            )}
           </Upload>
         </Form.Item>
         <Form.Item name="digitalSignature" label="Digital Signature">

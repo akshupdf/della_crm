@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl, dashboardCount} from './appSlice';
+import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl, dashboardCount, assignTo, fetchLeadsbyLocation, fetchUsersbyRole, uploadImg} from './appSlice';
 
 const userSlice = createSlice({
   name: 'user',
@@ -15,8 +15,12 @@ const userSlice = createSlice({
     currentRole: null, // Current logged-in user's role
     usersByRole: null, // Users filtered by role
     usersByTL: null, 
+    usersByRoledata: null,
     addLead: null,
-    dashboardData: null
+    dashboardData: null,
+    assignToData: null,
+    leadsLoc: [],
+    uploadedImg: null
   },
   reducers: {
     logoutUser: (state) => {
@@ -54,6 +58,20 @@ const userSlice = createSlice({
         state.leads = action.payload;
       })
       .addCase(fetchLeads.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+       // Fetch Leads location wise
+       .addCase(fetchLeadsbyLocation.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchLeadsbyLocation.fulfilled, (state, action) => {
+        state.loading = false;
+        state.leadsLoc = action.payload;
+      })
+      .addCase(fetchLeadsbyLocation.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -114,6 +132,21 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
 
+      //fetch users by role
+
+      .addCase(fetchUsersbyRole.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUsersbyRole.fulfilled, (state, action) => {
+        state.loading = false;
+        state.usersByRoledata = action.payload;
+      })
+      .addCase(fetchUsersbyRole.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       //add Leads
       .addCase(addLead.pending, (state) => {
         state.loading = true;
@@ -143,6 +176,36 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+      .addCase(assignTo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(assignTo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.assignToData = [ action.payload];
+      })
+      .addCase(assignTo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //upload image
+
+      
+      .addCase(uploadImg.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(uploadImg.fulfilled, (state, action) => {
+        state.loading = false;
+        state.uploadedImg = action.payload;
+      })
+      .addCase(uploadImg.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
 
       .addDefaultCase((state) => state);
   },

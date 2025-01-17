@@ -72,7 +72,7 @@ const TeamManagement = () => {
               align="center"
             />
             <Table.Column
-              title="Confirmed Deals"
+              title="Confirmed Leads"
               dataIndex="confirmedDeals"
               key="confirmedDeals"
               align="center"

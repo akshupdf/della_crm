@@ -79,11 +79,34 @@ export const userLogout = createAsyncThunk(
 
 export const fetchLeads = createAsyncThunk(
   'api/fetchLeads',
-  async (status ,thunkAPI) => {
- let stat = status || "";
+  async (data ,thunkAPI) => {
 
     try {
-      const response = await axios.get(`${BASE_URL}/getleads?status=${stat}` ,{ headers: { Authorization: `Bearer ${token}` } }
+
+      let response;
+
+      if(data.id){
+        response = await axios.get(`${BASE_URL}/getleadsbyId/${data.id}` ,{ headers: { Authorization: `Bearer ${token}` } } );
+      }else{
+       response = await axios.get(`${BASE_URL}/getleads?status=${data.status}` ,{ headers: { Authorization: `Bearer ${token}` } }
+     );
+    }
+    
+      return response.data;
+
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchLeadsbyLocation = createAsyncThunk(
+  'api/fetchLeadsLoc',
+  async (loc ,thunkAPI) => {
+ let stat = loc || "";
+
+    try {
+      const response = await axios.get(`${BASE_URL}/getleads/${stat}` ,{ headers: { Authorization: `Bearer ${token}` } }
      );
       return response.data;
 
@@ -115,6 +138,22 @@ export const fetchUsersTl = createAsyncThunk(
       const response = await axios.get(`${BASE_URL}/${tl}/getUsersByTl`);
       
       return response.data.agentData;
+
+
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchUsersbyRole = createAsyncThunk(
+  'api/getUsersByRole',
+  async (role,thunkAPI) => {
+
+    try {
+      const response = await axios.get(`${BASE_URL}/getUsersByRole/${role}`);
+      
+      return response.data.rolewiseUsers;
 
 
     } catch (error) {
@@ -167,5 +206,37 @@ export const dashboardCount = createAsyncThunk(
       return thunkAPI.rejectWithValue(error.message);
     }
   }
+);
+
+export const assignTo = createAsyncThunk(
+  'api/assignto',
+  async (data,thunkAPI) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/assignto`, { ...data }, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        } });
+      return response.data;
+
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const uploadImg = createAsyncThunk(
+  'api/uploadImg',
+  async (data,thunkAPI) => {
+    try {
+      const response = await axios.post("https://della-backend.onrender.com/api/v1/upload", data, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        } });
+      return response.data;
+
+    } catch (error) {      
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  } 
 );
 

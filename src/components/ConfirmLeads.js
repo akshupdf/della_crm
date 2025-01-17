@@ -32,7 +32,9 @@ const ConfirmLeads = () => {
 
   useEffect(() => {
    
-      dispatch(fetchLeads("confirmed"));
+    const data = {status : "confirmed" }
+
+      dispatch(fetchLeads(data));
     
     }, [dispatch]);
 
