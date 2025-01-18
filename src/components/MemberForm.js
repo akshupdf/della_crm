@@ -197,15 +197,15 @@ const MembershipForm = ({ onSubmit }) => {
         </Form.Item>
 
         {/* Proofs and Agreements */}
-        <h3>Proofs and Agreements</h3>
-        <Form.Item label="Image 1">
+        {/* <h3>Proofs and Agreements</h3> */}
+        <Form.Item label="Payment Proof">
           <Upload
             customRequest={(info) => handleImageUpload(info, setImageUrl1)}
             listType="picture-card"
             showUploadList={false}
           >
             {imageUrl1 ? (
-              <img src={imageUrl1} alt="Uploaded" style={{ width: '100%' }} />
+              <img src={imageUrl1} alt="Uploaded" style={{ width: '100%' , height: '90%'}} />
             ) : (
               <div>
                 <UploadOutlined />
@@ -214,14 +214,14 @@ const MembershipForm = ({ onSubmit }) => {
             )}
           </Upload>
         </Form.Item>
-        <Form.Item label="Image 2">
+        <Form.Item label="Member Kyc proof">
           <Upload
             customRequest={(info) => handleImageUpload(info, setImageUrl2)}
             listType="picture-card"
             showUploadList={false}
           >
             {imageUrl2 ? (
-              <img src={imageUrl2} alt="Uploaded" style={{ width: '100%' }} />
+              <img src={imageUrl2} alt="Uploaded" style={{ width: '100%' , height: '90%' }} />
             ) : (
               <div>
                 <UploadOutlined />
@@ -230,14 +230,14 @@ const MembershipForm = ({ onSubmit }) => {
             )}
           </Upload>
         </Form.Item>
-        <Form.Item label="Image 3">
+        <Form.Item label="Digital Signature">
           <Upload
             customRequest={(info) => handleImageUpload(info, setImageUrl3)}
             listType="picture-card"
             showUploadList={false}
           >
             {imageUrl3 ? (
-              <img src={imageUrl3} alt="Uploaded" style={{ width: '100%' }} />
+              <img src={imageUrl3} alt="Uploaded" style={{ width: '100%' , height: '90%' }} />
             ) : (
               <div>
                 <UploadOutlined />
@@ -246,11 +246,11 @@ const MembershipForm = ({ onSubmit }) => {
             )}
           </Upload>
         </Form.Item>
-        <Form.Item name="digitalSignature" label="Digital Signature">
+        {/* <Form.Item name="digitalSignature" label="Digital Signature">
           <Upload>
             <button icon={<UploadOutlined />}>Upload Digital Signature</button>
           </Upload>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item name="agreementNumber" label="Agreement Number">
           <Input placeholder="Enter agreement number" />
         </Form.Item>

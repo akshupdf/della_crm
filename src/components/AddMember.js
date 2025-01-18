@@ -25,8 +25,14 @@ const AddMember = () => {
         { title: "Membership Period", dataIndex: "membershipPeriod", key: "membershipPeriod" },
         { title: "Membership Price", dataIndex: "membershipPrice", key: "membershipPrice" },
         { title: "Package Type", dataIndex: "packageType", key: "packageType" },
-        { title: "Privilege Club", dataIndex: "privilegeClub", key: "privilegeClub" },
-        { title: "Gym", dataIndex: "gym", key: "gym" },
+        { title: "Privilege Club", dataIndex: "privilegeClub", key: "privilegeClub",
+          render : (value) => (value ? "Yes" : "No")
+         },
+        { title: "Gym", 
+          dataIndex: "gym", 
+          key: "gym", 
+          render: (value) => (value ? "Yes" : "No") 
+        },
         { title: "Purchased Price", dataIndex: "purchasedPrice", key: "purchasedPrice" },
         { title: "Down Payment", dataIndex: "downPayment", key: "downPayment" },
         { title: "Balance", dataIndex: "balance", key: "balance" },
