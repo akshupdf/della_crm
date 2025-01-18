@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl, dashboardCount, assignTo, fetchLeadsbyLocation, fetchUsersbyRole, uploadImg} from './appSlice';
+import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl, dashboardCount, assignTo, fetchLeadsbyLocation, fetchUsersbyRole, uploadImg, fetchAllLeads} from './appSlice';
 
 const userSlice = createSlice({
   name: 'user',
@@ -10,6 +10,7 @@ const userSlice = createSlice({
     userInfo: null,
     userToken: null,
     leads: [],
+    allleads: [],
     members: [],
     roles: [], // List of roles
     currentRole: null, // Current logged-in user's role
@@ -58,6 +59,21 @@ const userSlice = createSlice({
         state.leads = action.payload;
       })
       .addCase(fetchLeads.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //fetch all leads
+
+      .addCase(fetchAllLeads.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllLeads.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allleads = action.payload;
+      })
+      .addCase(fetchAllLeads.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

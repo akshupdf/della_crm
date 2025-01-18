@@ -87,10 +87,29 @@ export const fetchLeads = createAsyncThunk(
 
       if(data.id){
         response = await axios.get(`${BASE_URL}/getleadsbyId/${data.id}` ,{ headers: { Authorization: `Bearer ${token}` } } );
-      }else{
+      }else if(data.status){
        response = await axios.get(`${BASE_URL}/getleads?status=${data.status}` ,{ headers: { Authorization: `Bearer ${token}` } }
      );
+    }else{
+      response = await axios.get(`${BASE_URL}/getleads` ,{ headers: { Authorization: `Bearer ${token}` } })
     }
+    
+      return response.data;
+
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchAllLeads = createAsyncThunk(
+  'api/fetchAllLeads',
+  async (thunkAPI) => {
+
+    try {
+
+  
+     const response = await axios.get(`${BASE_URL}/getleads` ,{ headers: { Authorization: `Bearer ${token}` } })
     
       return response.data;
 

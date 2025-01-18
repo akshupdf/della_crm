@@ -1,19 +1,19 @@
 import React, { useEffect, useMemo } from "react";
 import { Table } from "antd";
 import {  useDispatch, useSelector } from "react-redux";
-import { fetchLeads } from "../redux/appSlice";
+import { fetchAllLeads, fetchLeads } from "../redux/appSlice";
 
 const TotalLeads = () => {
 
   const dispatch = useDispatch();
 
-  const { leads, loading } = useSelector((state) => state.user);
+  const { allleads, loading } = useSelector((state) => state.user);
 
    useEffect(() => {
-     
-        dispatch(fetchLeads());
+    
+          dispatch(fetchAllLeads());
       
-      }, [ dispatch]);
+      }, [dispatch]);
 
   // Memoize columns
   const columns = useMemo(
@@ -35,7 +35,7 @@ const TotalLeads = () => {
   );
 
   // Memoize leads data
-  const memoizedLeads = useMemo(() => leads, [leads]);
+  const memoizedLeads = useMemo(() => allleads, [allleads]);
 
   return (
     <div className="px-8 rounded-2xl mt-10">
