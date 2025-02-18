@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {  addMember, fetchMember } from "../redux/appSlice";
 import MembershipForm from "./MemberForm";
 
-const AddMember = () => {
+const { Option } = Select;
+
+const CustomerCare = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   const { members, loading } = useSelector((state) => state.user);
@@ -39,7 +41,20 @@ const AddMember = () => {
         { title: "Manager", dataIndex: "manager", key: "manager" },
         { title: "Branch In Charge", dataIndex: "branchInCharge", key: "branchInCharge" },
         { title: "Agreement Number", dataIndex: "agreementNumber", key: "agreementNumber" },
-        { title: "AMC", dataIndex: "amc", key: "amc" },
+        // { title: "AMC", dataIndex: "amc", key: "amc" },
+        {title :"Payment Proof", dataIndex:"paymentProof", key:"paymentProof", 
+           render: (proof, record) => (
+            proof && <a href={`${proof}`} target="_blank">Payment proof</a>
+                ), },
+        {title :"Member Kyc", dataIndex:"memberKyc", key:"memberKyc" ,  
+          render: (proof, record) => (
+          proof && <a href={`${proof}`} target="_blank">Member Kyc</a>
+              ),},
+        {title :"Digital Signature", dataIndex:"digitalSignature", key:"digitalSignature",
+          render: (proof, record) => (
+            proof && <a href={`${proof}`} target="_blank">Digital Signature</a>
+                )
+         },
     ],
     []
   );
@@ -47,43 +62,12 @@ const AddMember = () => {
   // Memoize leads data
   const memoizedLeads = useMemo(() => members, [members]);
 
-  // Handle modal visibility
-  const showModal = useCallback(() => setIsModalOpen(true), []);
-  const handleCancel = useCallback(() => setIsModalOpen(false), []);
-
-  // Handle lead submission
-  const handleLeadSubmit = useCallback(
-    async (formData) => {
-      try {
-        await dispatch(addMember(formData));
-        dispatch(fetchMember());
-        setIsModalOpen(false);
-      } catch (error) {
-        console.error("Failed to add lead:", error);
-      }
-    },
-    [dispatch]
-  );
-
-  // Handle status change
-//   const handleStatusChange = useCallback(
-//     async (leadId, newStatus) => {
-//       try {
-//         await dispatch(updateStatus({ leadId, newStatus })).unwrap();
-//         dispatch(fetchMember());
-//       } catch (error) {
-//         console.error("Failed to update status:", error);
-//       }
-//     },
-//     [dispatch]
-//   );
-
   const skeletonRows = Array.from({ length: members?.length < 6 ? members?.length : 6  });
 
   return (
     <div className="w-auto mt-10 members">
       <h1 className="text-4xl text-center w-full pb-4 font-semibold">
-        Add Member
+        Members
       </h1>
 
       {loading ? (
@@ -168,21 +152,8 @@ const AddMember = () => {
         />
       )}
 
-      <button type="primary" onClick={showModal} className="mt-4">
-        Add Member
-      </button>
-
-      <Modal
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-        width="80%"
-        style={{ top: 20 }}
-      >
-        <MembershipForm onSubmit={handleLeadSubmit} />
-      </Modal>
     </div>
   );
 };
 
-export default AddMember;
+export default CustomerCare;

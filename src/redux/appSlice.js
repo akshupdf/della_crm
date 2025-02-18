@@ -2,7 +2,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-let BASE_URL = 'https://della-backend.vercel.app/api/v1';
+let BASE_URL = 'http://localhost:5000/api/v1';
 const token = localStorage.getItem('token');
 
 export const addUser = createAsyncThunk(

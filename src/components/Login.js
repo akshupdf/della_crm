@@ -108,6 +108,9 @@ const Login = () => {
       }else if (role === "sales") {
         toast?.success("Login Successful");
         navigate("/dashboard");
+      }else if (role === "customercare") {
+        toast?.success("Login Successful");
+        navigate("/members");
       }
 
       

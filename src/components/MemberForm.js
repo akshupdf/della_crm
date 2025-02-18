@@ -33,7 +33,7 @@ const MembershipForm = ({ onSubmit }) => {
       digitalSignature: imageUrl3,
       status:"new",
     };
-    console.log(formattedValues);
+    // console.log(formattedValues);
     
     onSubmit(formattedValues);
     form.resetFields();

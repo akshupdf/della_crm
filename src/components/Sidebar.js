@@ -77,6 +77,13 @@ const Sidebar = () => {
           <Link to="/assign">Assign Leads</Link>
           </Menu.Item> )
        }
+
+{
+        ["superadmin", "customercare"].includes(role) && (
+          <Menu.Item key="8" icon={<TeamOutlined />}>
+          <Link to="/members">Members</Link>
+          </Menu.Item> )
+       }
        
       </Menu>
     </Sider>

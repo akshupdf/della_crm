@@ -16,6 +16,7 @@ import Navbar from "./components/Navbar";
 import AddMember from "./components/AddMember";
 import LeadForm from "./components/Form";
 import AssignLeads from "./components/AssignLeads";
+import CustomerCare from "./components/CustomerCare";
 
 
 
@@ -45,6 +46,7 @@ const App = () => {
               <Route path="/teammanagement" element={<TeamManagement />} />
               <Route path="/addmember" element={<AddMember />} />
               <Route path="/assign" element={<AssignLeads />} />
+              <Route path="/members" element={<CustomerCare />} />
             </Routes>
           </Content>
         </Layout>
