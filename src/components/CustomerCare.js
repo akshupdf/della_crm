@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { Table, Modal, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import {  addMember, fetchMember } from "../redux/appSlice";
+import {   findMember } from "../redux/appSlice";
 import MembershipForm from "./MemberForm";
 
 const { Option } = Select;
@@ -10,11 +10,20 @@ const CustomerCare = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   const { members, loading } = useSelector((state) => state.user);
+  const [searchId, setSearchId] = useState("");
+
+
 
   // Fetch leads once when the component mounts
-  useEffect(() => {
-    dispatch(fetchMember());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(findMember(searchQuery));
+  // }, [searchQuery,dispatch]);
+
+  const handleSearchById = () => {
+    if (searchId.trim()) {
+      dispatch(findMember({ id: searchId.trim() })); // Pass the ID to the action
+    }
+  };
 
   // Memoize columns
   const columns = useMemo(
@@ -70,8 +79,26 @@ const CustomerCare = () => {
         Members
       </h1>
 
+      <div className="flex justify-center items-center mb-4 space-x-2">
+        <input
+          type="text"
+          placeholder="Enter Member ID"
+          value={searchId}
+          onChange={(e) => setSearchId(e.target.value)}
+          className="border border-gray-300 rounded-lg p-2 w-1/3"
+        />
+        <button
+          onClick={handleSearchById}
+          className="bg-green-500 text-white px-4 py-2 rounded-lg"
+        >
+          Search
+        </button>
+      </div>
+
       {loading ? (
         <div className="loading-placeholder">
+
+
           <table
         className="min-w-full w-auto bg-white"
         style={{

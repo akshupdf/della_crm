@@ -2,7 +2,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-let BASE_URL = 'http://localhost:5000/api/v1';
+let BASE_URL = 'https://della-backend.vercel.app/api/v1';
 const token = localStorage.getItem('token');
 
 export const addUser = createAsyncThunk(
@@ -97,6 +97,8 @@ export const fetchLeads = createAsyncThunk(
       return response.data;
 
     } catch (error) {
+      console.log(error);
+      
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -141,6 +143,20 @@ export const fetchMember = createAsyncThunk(
 
     try {
       const response = await axios.get(`${BASE_URL}/membership`);
+      return response.data;
+
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const findMember = createAsyncThunk(
+  'api/findmembership',
+  async (data, thunkAPI) => {
+
+    try {
+      const response = await axios.post(`${BASE_URL}/findmembership`, data);
       return response.data;
 
     } catch (error) {

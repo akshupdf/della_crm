@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl, dashboardCount, assignTo, fetchLeadsbyLocation, fetchUsersbyRole, uploadImg, fetchAllLeads} from './appSlice';
+import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl, dashboardCount, assignTo, fetchLeadsbyLocation, fetchUsersbyRole, uploadImg, fetchAllLeads, findMember} from './appSlice';
 
 const userSlice = createSlice({
   name: 'user',
@@ -12,6 +12,7 @@ const userSlice = createSlice({
     leads: [],
     allleads: [],
     members: [],
+    allMember: [],
     roles: [], // List of roles
     currentRole: null, // Current logged-in user's role
     usersByRole: null, // Users filtered by role
@@ -99,12 +100,26 @@ const userSlice = createSlice({
       })
       .addCase(fetchMember.fulfilled, (state, action) => {
         state.loading = false;
-        state.members = action.payload;
+        state.allMember = action.payload;
       })
       .addCase(fetchMember.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
+
+        // Find Members
+        .addCase(findMember.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(findMember.fulfilled, (state, action) => {
+          state.loading = false;
+          state.members = action.payload;
+        })
+        .addCase(findMember.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        })
 
       // Assign Role
       .addCase(updateStatus.pending, (state) => {
