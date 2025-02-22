@@ -3,6 +3,7 @@ import { Table, Modal, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {   findMember } from "../redux/appSlice";
 import MembershipForm from "./MemberForm";
+import TravelForm from "./MerberDetails";
 
 const { Option } = Select;
 
@@ -178,6 +179,8 @@ const CustomerCare = () => {
           loading={loading}
         />
       )}
+
+      <TravelForm />
 
     </div>
   );
