@@ -43,6 +43,44 @@ export const updateStatus = createAsyncThunk(
   }
 );
 
+export const updateTravStatus = createAsyncThunk(
+  'user/updateTravStatus',
+  async (data, thunkAPI) => {
+    
+    try {
+      // const token = localStorage.getItem('token');
+
+      const response = await axios.put(`${BASE_URL}/benefit/${data?.leadId}/status`, { trav_status: data?.newStatus }, 
+        { headers: { Authorization: `Bearer ${data?.token}` } }
+        
+      );
+      return response;
+      
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateBenStatus = createAsyncThunk(
+  'user/updateBenStatus',
+  async (data, thunkAPI) => {
+    
+    try {
+      // const token = localStorage.getItem('token');
+
+      const response = await axios.put(`${BASE_URL}/clubbenefit/${data?.leadId}/status`, { ben_status : data?.newStatus }, 
+        { headers: { Authorization: `Bearer ${data?.token}` } }
+        
+      );
+      return response;
+      
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getLogin = createAsyncThunk(
   'api/login',
   async ( data , thunkAPI) => {
@@ -138,13 +176,13 @@ export const fetchLeadsbyLocation = createAsyncThunk(
 );
 
 export const fetchMember = createAsyncThunk(
-  'api/membership',
+  'api/allmembership',
   async (thunkAPI) => {
 
     try {
-      const response = await axios.get(`${BASE_URL}/membership`);
+      const response = await axios.get(`${BASE_URL}/allmembership`);
       return response.data;
-
+  
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -273,5 +311,58 @@ export const uploadImg = createAsyncThunk(
       return thunkAPI.rejectWithValue(error.message);
     }
   } 
+);
+
+export const addClubBenefit = createAsyncThunk(
+  'api/clubbenefit',
+  async (data, thunkAPI) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/clubbenefit`, data );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchBenefits = createAsyncThunk(
+  'api/benefits',
+  async (id,thunkAPI) => {
+
+    try {
+      const response = await axios.get(`${BASE_URL}/benefits/${id}`);
+      return response.data;
+
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchClubBenefits = createAsyncThunk(
+  'api/clubbenefit',
+  async (id,thunkAPI) => {
+
+    try {
+      const response = await axios.get(`${BASE_URL}/clubbenefits/${id}`);
+      return response.data;
+
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+
+export const addTravelBenefit = createAsyncThunk(
+  'api/benefit',
+  async (data, thunkAPI) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/benefit`, data );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
 );
 

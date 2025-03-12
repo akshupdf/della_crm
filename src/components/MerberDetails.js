@@ -1,29 +1,51 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { addBenefit, addClubBenefit, addTravelBenefit, fetchBenefits, fetchClubBenefits } from "../redux/appSlice";
 
-const TravelForm = () => {
+const TravelForm = ({searchId , handleCancel , travelStatus}) => {
+
+  const dispatch = useDispatch();
+
   const initialValues = {
-    travelling: "up to 40%",
-    pickUpDrop: "Free (A-H-A)",
-    accommodation: "Free",
-    food: "B.F Free, L&D up to 40%",
-    sightseeing: "Cab - as per app charges, Driver/Guide - Free",
-    medicalFacilities: "Doctor on call, 24*7 Free",
-    games: "Indoor activities",
+    travelling: "",
+    pickUpDrop: "",
+    accommodation: "",
+    food: "",
+    sightseeing: "",
+    medicalFacilities: "",
+    games: "",
     gym: "",
-    movie: "Free 4 tickets every year",
-    anniversaryDinner: "Couple at 4* 5*",
+    movie: "",
+    anniversaryDinner: "",
     events: [],
+    memberId : searchId
   };
 
   const validationSchema = Yup.object().shape({
-    gym: Yup.string().required("Gym membership is required"),
-    events: Yup.array().min(1, "At least one event must be selected"),
+    // gym: Yup.string().required("Gym membership is required"),
+    // events: Yup.array().min(1, "At least one event must be selected"),
   });
 
-  const handleSubmit = (values) => {
-    console.log("Form Data:", values);
+  const handleSubmit = async (values) => {
+
+    let result ;
+    if(travelStatus === "travel") {
+
+    result =  dispatch(addTravelBenefit(values));
+
+    dispatch(fetchBenefits(searchId));
+
+    }else {
+
+       result =  dispatch(addClubBenefit(values));
+
+       dispatch(fetchClubBenefits(searchId));
+    }
+    
+
+    handleCancel();
   };
 
   return (
@@ -34,7 +56,11 @@ const TravelForm = () => {
     >
       {({ values }) => (
         <Form className="p-4 bg-gray-100 rounded-md">
-          <h2 className="text-xl font-semibold mb-4">Travel & Benefits Form</h2>
+        {  (travelStatus === "travel"  ) &&  
+        
+        <div> 
+          
+          <h2 className="text-xl font-semibold mb-4">Travel Form</h2>
 
           <div className="mb-3">
             <label>Travelling:</label>
@@ -60,7 +86,10 @@ const TravelForm = () => {
             <label>Sightseeing:</label>
             <Field name="sightseeing" className="border p-2 w-full"   />
           </div>
+</div> }
 
+{ travelStatus === "club" &&
+<div> 
           <div className="mb-3">
             <label>Medical Facilities:</label>
             <Field name="medicalFacilities" className="border p-2 w-full"   />
@@ -103,7 +132,7 @@ const TravelForm = () => {
             </div>
             <ErrorMessage name="events" component="div" className="text-red-500" />
           </div>
-
+              </div> }
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
             Submit
           </button>

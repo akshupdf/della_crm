@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl, dashboardCount, assignTo, fetchLeadsbyLocation, fetchUsersbyRole, uploadImg, fetchAllLeads, findMember} from './appSlice';
+import { addUser, updateStatus, getLogin, fetchLeads , addLead, fetchMember, fetchUsersTl, dashboardCount, assignTo, fetchLeadsbyLocation, fetchUsersbyRole, uploadImg, fetchAllLeads, findMember, fetchBenefits, fetchClubBenefits} from './appSlice';
 
 const userSlice = createSlice({
   name: 'user',
@@ -22,7 +22,9 @@ const userSlice = createSlice({
     dashboardData: null,
     assignToData: null,
     leadsLoc: [],
-    uploadedImg: null
+    uploadedImg: null,
+    benefits: null,
+    clubbenefits: null
   },
   reducers: {
     logoutUser: (state) => {
@@ -220,6 +222,36 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+      //get benefits
+      .addCase(fetchBenefits.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchBenefits.fulfilled, (state, action) => {
+        state.loading = false;
+        state.benefits = action.payload;
+      })
+      .addCase(fetchBenefits.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      //get club benefits
+
+         //get benefits
+         .addCase(fetchClubBenefits.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(fetchClubBenefits.fulfilled, (state, action) => {
+          state.loading = false;
+          state.clubbenefits = action.payload;
+        })
+        .addCase(fetchClubBenefits.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        })
 
       //upload image
 

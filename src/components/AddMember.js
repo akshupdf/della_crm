@@ -7,7 +7,7 @@ import MembershipForm from "./MemberForm";
 const AddMember = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
-  const { members, loading } = useSelector((state) => state.user);
+  const { allMember, loading } = useSelector((state) => state.user);
 
   // Fetch leads once when the component mounts
   useEffect(() => {
@@ -45,7 +45,7 @@ const AddMember = () => {
   );
 
   // Memoize leads data
-  const memoizedLeads = useMemo(() => members, [members]);
+  const memoizedLeads = useMemo(() => allMember, [allMember]);
 
   // Handle modal visibility
   const showModal = useCallback(() => setIsModalOpen(true), []);
@@ -78,7 +78,10 @@ const AddMember = () => {
 //     [dispatch]
 //   );
 
-  const skeletonRows = Array.from({ length: members?.length < 6 ? members?.length : 6  });
+console.log(allMember);
+
+
+  const skeletonRows = Array.from({ length: allMember?.length < 6 ? allMember?.length : 6  });
 
   return (
     <div className="w-auto mt-10 members">
