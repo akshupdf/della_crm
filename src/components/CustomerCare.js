@@ -133,7 +133,7 @@ const CustomerCare = () => {
       {
         searchId && 
       
-      <TravelPackages activeTab={activeTab} setActiveTab={setActiveTab} />
+      <TravelPackages activeTab={activeTab} setActiveTab={setActiveTab} searchId={searchId} />
       }
     </div>
   );

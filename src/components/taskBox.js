@@ -1,13 +1,15 @@
 import { Select } from "antd";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBenefits, fetchClubBenefits, updateBenStatus, updateTravStatus } from "../redux/appSlice";
 
 
-const TravelPackages = ({activeTab, setActiveTab}) => {
+const TravelPackages = ({activeTab, setActiveTab ,searchId}) => {
 
   const {  benefits, loading} = useSelector((state) => state.user);
   const {clubbenefits  } = useSelector((state) => state.user);
 
+  const dispatch = useDispatch();
 
   const options = [
     { value: "new", label: "new" },
@@ -15,6 +17,36 @@ const TravelPackages = ({activeTab, setActiveTab}) => {
     { value: "rejected", label: "rejected" },
     { value: "accepted", label: "accepted" },
   ];
+
+      const handleTravStatusChange = useCallback(
+        async (leadId, newStatus) => {
+          try {
+  
+         
+            await dispatch(updateTravStatus({ leadId, newStatus })).unwrap();
+            dispatch(fetchBenefits(searchId));
+            alert("Status updated successfully");
+            
+          } catch (error) {
+            console.error("Failed to update status:", error);
+          }
+        },
+        [dispatch]
+      );
+
+          const handleClubStatusChange = useCallback(
+            async (leadId, newStatus) => {
+              try {             
+                await dispatch(updateBenStatus({ leadId, newStatus })).unwrap();
+                dispatch(fetchClubBenefits(searchId));
+                alert("Status updated successfully");
+                
+              } catch (error) {
+                console.error("Failed to update status:", error);
+              }
+            },
+            [dispatch]
+          );
 
 
   
@@ -69,6 +101,9 @@ const TravelPackages = ({activeTab, setActiveTab}) => {
                   value: option.value,
                 }))}
                 value={packageData.trav_status}
+                onChange={(value) => {
+                  handleTravStatusChange(packageData._id, value);
+                }}
                 className="w-[15vh] ml-10"
               />
             </div>
@@ -92,6 +127,21 @@ const TravelPackages = ({activeTab, setActiveTab}) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {clubbenefits.length > 0 && clubbenefits?.map((data) => (
              <div key={data.id} className="bg-white shadow-lg rounded-lg p-6">
+                <div className="flex">
+              <strong>Status:</strong>
+              <Select
+                placeholder="Select Status"
+                options={options.map((option) => ({
+                  label: option.label,
+                  value: option.value,
+                }))}
+                value={data.ben_status}
+                onChange={(value) => {
+                  handleClubStatusChange(data._id, value);
+                }}
+                className="w-[15vh] ml-10"
+              />
+            </div>
                 <p><strong>Medical:</strong> {data.medicalFacilities}</p>
                 <p><strong>Games:</strong> {data.games}</p>
                 <p><strong>Gym:</strong> {data.gym}</p>
